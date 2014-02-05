@@ -32,6 +32,13 @@
 (require 'haskell-show)
 (with-no-warnings (require 'cl))
 
+(defcustom haskell-interactive-mode-do-fast-keys
+  nil
+  "Rebind !, :, ?, +, and - to be more interactive when pressed
+at the start of the REPL prompt."
+  :type 'boolean
+  :group 'haskell-interactive)
+
 (defcustom haskell-interactive-mode-eval-pretty
   nil
   "Print eval results that can be parsed as Show instances prettily. Requires sexp-show (on Hackage)."
@@ -87,6 +94,11 @@ printing compilation messages."
     (define-key map (kbd "C-<up>") 'haskell-interactive-mode-history-previous)
     (define-key map (kbd "C-<down>") 'haskell-interactive-mode-history-next)
     (define-key map (kbd "TAB") 'haskell-interactive-mode-tab)
+    (define-key map (kbd ":") 'haskell-interactive-command)
+    (define-key map (kbd "!") 'haskell-interactive-shell)
+    (define-key map (kbd "?") 'haskell-interactive-help)
+    (define-key map (kbd "+") 'haskell-interactive-add-module)
+    (define-key map (kbd "-") 'haskell-interactive-remove-module)
     map)
   "Interactive Haskell mode map.")
 
@@ -174,9 +186,9 @@ Key bindings:
   (if (and (bound-and-true-p god-local-mode)
            (fboundp 'god-mode-self-insert))
       (call-interactively 'god-mode-self-insert)
-      (if (haskell-interactive-at-compile-message)
-          (next-error-no-select 0)
-        (self-insert-command n))))
+    (if (haskell-interactive-at-compile-message)
+        (next-error-no-select 0)
+      (self-insert-command n))))
 
 (defun haskell-interactive-at-prompt ()
   "If at prompt, returns start position of user-input, otherwise returns nil."
@@ -661,6 +673,221 @@ FILE-NAME only."
       (haskell-session-kill t))))
 
 (add-hook 'kill-buffer-hook 'haskell-interactive-kill)
+
+(defun haskell-interactive-mode-do-fast-keys ()
+  "Do fast keys? E.g. ? for help, ! for shell, : for a completing
+  read."
+  (and haskell-interactive-mode-do-fast-keys
+       (haskell-interactive-mode-at-start)))
+
+(defun haskell-interactive-mode-at-start ()
+  "Are we at the start of the prompt?"
+  (save-excursion
+    (= (point)
+       (progn (haskell-interactive-mode-beginning)
+              (point)))))
+
+(defun haskell-interactive-shell (n)
+  "Run a shell command."
+  (interactive "p")
+  (if (haskell-interactive-mode-do-fast-keys)
+      (haskell-interactive-mode-run-line
+       (concat ":! "
+               (read-from-minibuffer "Command: ")))
+    (self-insert-command n)))
+
+(defun haskell-interactive-help (n)
+  "Run help."
+  (interactive "p")
+  (if (haskell-interactive-mode-do-fast-keys)
+      (haskell-interactive-mode-run-line ":? ")
+    (self-insert-command n)))
+
+(defun haskell-interactive-mode-fast-completing-read (drop prompt candidates)
+  "Prompt with PROMPT but returns as soon as there
+  is an unambiguous match in CANDIDATES.
+
+A special key DROP (any char e.g. ?a) when pressed first will
+cause the prompt to drop down to plain text mode instead."
+  (let ((prefix "")
+        (current-candidates candidates))
+    (while (not (= 1 (length current-candidates)))
+      (let ((char
+             (read-event (concat
+                          (propertize
+                           prompt
+                           'face 'minibuffer-prompt)
+                          (mapconcat 'identity
+                                     current-candidates
+                                     " ")))))
+        (cond
+         ((eq char drop)
+          (setq current-candidates
+                (list (read-from-minibuffer prompt ":"))))
+         ((eq char 'backspace)
+          (setq prefix
+                (if (= 0 (length prefix))
+                    prefix
+                  (substring prefix 0 (1- (length prefix)))))
+          (setq current-candidates
+                (remove-if-not
+                 (lambda (candidate)
+                   (string-prefix-p prefix candidate))
+                 candidates)))
+         ((numberp char)
+          (setq prefix (concat prefix (char-to-string char)))
+          (setq current-candidates
+                (remove-if-not
+                 (lambda (candidate)
+                   (string-prefix-p prefix candidate))
+                 current-candidates))))))
+    (car current-candidates)))
+
+(defun haskell-interactive-add-module (n)
+  "Add a module."
+  (interactive "p")
+  (if (haskell-interactive-mode-do-fast-keys)
+      (haskell-interactive-mode-run-line
+       (concat ":m + "
+               (ido-completing-read "Module: "
+                                    (haskell-session-all-modules))))
+    (self-insert-command n)))
+
+(defun haskell-interactive-remove-module (n)
+  "Remove a module."
+  (interactive "p")
+  (if (haskell-interactive-mode-do-fast-keys)
+      (haskell-interactive-mode-run-line
+       (concat ":m - "
+               (ido-completing-read "Module: "
+                                    (haskell-interactive-mode-imported-modules))))
+    (self-insert-command n)))
+
+(defun haskell-interactive-mode-imported-modules ()
+  "Get all imported modules."
+  (let* ((process (haskell-process))
+         (string (haskell-process-queue-sync-request
+                  process
+                  ":show imports"))
+         (modules (mapcar (lambda (i)
+                            (replace-regexp-in-string "^import \\(qualified \\)?\\([^ ]+\\).*"
+                                                      "\\2"
+                                                      i))
+                          (split-string string
+                                        "\n"))))
+    modules))
+
+(defun haskell-interactive-mode-fake-line (line)
+  "Insert LINE into the prompt and run it."
+  (haskell-interactive-mode-set-prompt line)
+  (haskell-interactive-mode-return))
+
+(defun haskell-interactive-command (n)
+  "Run an interactive command. Prompts for the command to run."
+  (interactive "p")
+  (if (haskell-interactive-mode-do-fast-keys)
+      (let ((command (haskell-interactive-mode-fast-completing-read
+                      ?:
+                      "Command: "
+                      haskell-interactive-mode-commands))
+            (session (haskell-session)))
+        (cond
+         ((string= command ":")
+          (haskell-interactive-mode-fake-line
+           ":"))
+         ((string= command "load")
+          (haskell-interactive-mode-fake-line
+           (concat ":load "
+                   (ido-read-file-name "Module: "
+                                       (haskell-session-current-dir session)))))
+         ((string= command "add")
+          (haskell-interactive-mode-fake-line
+           (concat ":add "
+                   (ido-completing-read "Module: "
+                                        (haskell-session-all-modules)))))
+         ((string= command "module")
+          (haskell-interactive-mode-fake-line
+           (concat ":module "
+                   (ido-completing-read "Add/remove: "
+                                        '("+" "-"))
+                   " "
+                   (ido-completing-read "Module: "
+                                        (haskell-session-all-modules)))))
+         ((string= command "cd")
+          (haskell-interactive-mode-fake-line
+           (concat ":cd "
+                   (ido-read-directory-name "Change directory: "
+                                            (haskell-session-current-dir session)))))
+         ((or (string= command "help")
+              (string= command "quit")
+              (string= command "reload")
+              (string= command "?"))
+          (haskell-interactive-mode-fake-line
+           (concat ":" command)))
+         ((string= command "show")
+          (haskell-interactive-mode-fake-line
+           (concat ":"
+                   command
+                   " "
+                   (haskell-interactive-mode-fast-completing-read
+                    ?:
+                    "Show: "
+                    haskell-interactive-mode-show-commands))))
+         ((string-prefix-p ":"
+                           command)
+          (haskell-interactive-mode-fake-line command))
+         (t
+          (haskell-interactive-mode-set-prompt
+           (concat ":"
+                   (cond
+                    ((string= "type" command)
+                     "t")
+                    ((string= "info" command)
+                     "i")
+                    ((string= "r" command)
+                     "i")
+                    (t command))
+                   " "
+                   (haskell-interactive-mode-input))))))
+    (self-insert-command n)))
+
+(defvar haskell-interactive-mode-commands
+  '("add"
+    "browse"
+    "cd"
+    "def"
+    "info"
+    "kind"
+    "load"
+    "main"
+    "quit"
+    "reload"
+    "script"
+    "type"
+    "undef"
+    "force"
+    "print"
+    "sprint"
+    "set"
+    "unset"
+    "show")
+  "Known commands which may or may not be specially handled by
+  this mode.")
+
+(defvar haskell-interactive-mode-show-commands
+  '("args"
+    "prog"
+    "prompt"
+    "editor"
+    "imports"
+    "stop"
+    "modules"
+    "bindings"
+    "breaks"
+    "context"
+    "packages"
+    "languages")
+  "Commands to :show.")
 
 (provide 'haskell-interactive-mode)
 
