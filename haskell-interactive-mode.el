@@ -800,6 +800,11 @@ cause the prompt to drop down to plain text mode instead."
            (concat ":load "
                    (ido-read-file-name "Module: "
                                        (haskell-session-current-dir session)))))
+         ((string= command "script")
+          (haskell-interactive-mode-fake-line
+           (concat ":script "
+                   (ido-read-file-name "Script: "
+                                       (haskell-session-current-dir session)))))
          ((string= command "add")
           (haskell-interactive-mode-fake-line
            (concat ":add "
