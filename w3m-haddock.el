@@ -1,4 +1,4 @@
-(defvar w3m-haddock-entry-regex "^\\(data \\|[a-z].* :: \\)"
+(defvar w3m-haddock-entry-regex "^\\(\\(data\\|type\\) \\|[a-z].* :: \\)"
   "Regex to match entry headings.")
 
 (defun w3m-haddock-display (url)
@@ -11,27 +11,15 @@
     (save-excursion
       (goto-char (point-min))
       (let ((inhibit-read-only t))
-        ;; Delete the URL line
         (delete-region (point)
                        (line-end-position))
-        ;; Delete the "Description" line, it's pointless
-        (search-forward-regexp "^Description\n\n" nil nil 1)
-        (delete-region (save-excursion (forward-word -1)
-                                       (point))
-                       (point))
-        ;; Delete the synopsis
-        (search-forward-regexp "^Synopsis\n\n" nil nil 1)
-        (delete-region (save-excursion (forward-word -1)
-                                       (point))
-                       (search-forward-regexp "\n\n" nil nil 1))
         (w3m-haddock-next-heading)
         ;; Start formatting entries
         (while (looking-at w3m-haddock-entry-regex)
           (when (w3m-haddock-valid-heading)
             (w3m-haddock-format-heading))
-          (w3m-haddock-next-heading))
-        ;; Damp out the haddock version number
-        (w3m-haddock-damp-out-version)))))
+          (w3m-haddock-next-heading))))
+    (rename-buffer (concat "*haddock: " (w3m-buffer-title (current-buffer)) "*"))))
 
 (defun w3m-haddock-damp-out-version ()
   "Damp out the Haddock version number."
