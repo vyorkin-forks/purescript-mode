@@ -1,13 +1,40 @@
 (defvar w3m-haddock-entry-regex "^\\(\\(data\\|type\\) \\|[a-z].* :: \\)"
   "Regex to match entry headings.")
 
+(defun w3m-haddock-page-p ()
+  "Haddock general page?"
+  (save-excursion
+    (goto-char (point-max))
+    (forward-line -2)
+    (looking-at "[ ]*Produced by Haddock")))
+
+(defun w3m-haddock-source-p ()
+  "Haddock source page?"
+  (save-excursion
+    (goto-char (point-min))
+    (looking-at "Location: https?://hackage.haskell.org/package/.*/docs/src/")))
+
+(defun w3m-haddock-p ()
+  "Any haddock page?"
+  (or (w3m-haddock-page-p)
+      (w3m-haddock-source-p)))
+
+(defun w3m-haddock-find-tag ()
+  "Find a tag by jumping to the \"All\" index and doing a
+  search-forward."
+  (interactive)
+  (when (w3m-haddock-p)
+    (let ((ident (haskell-ident-at-point)))
+      (when ident
+        (w3m-browse-url
+         (replace-regexp-in-string "docs/.*" "docs/doc-index-All.html" w3m-current-url))
+        (search-forward ident)))))
+
 (defun w3m-haddock-display (url)
   "To be ran by w3m's display hook. This takes a normal w3m
   buffer containing hadddock documentation and reformats it to be
   more usable and look like a dedicated documentation page."
-  (when (save-excursion (goto-char (point-max))
-                        (forward-line -2)
-                        (looking-at "Produced by Haddock"))
+  (when (w3m-haddock-page-p)
     (save-excursion
       (goto-char (point-min))
       (let ((inhibit-read-only t))
@@ -20,8 +47,7 @@
             (w3m-haddock-format-heading))
           (w3m-haddock-next-heading))))
     (rename-buffer (concat "*haddock: " (w3m-buffer-title (current-buffer)) "*")))
-  (when (save-excursion (goto-char (point-min))
-                        (looking-at "Location: https?://hackage.haskell.org/package/.*/docs/src/"))
+  (when (w3m-haddock-source-p)
     (font-lock-mode -1)
     (let ((n (line-number-at-pos)))
       (save-excursion
