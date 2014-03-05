@@ -19,7 +19,23 @@
           (when (w3m-haddock-valid-heading)
             (w3m-haddock-format-heading))
           (w3m-haddock-next-heading))))
-    (rename-buffer (concat "*haddock: " (w3m-buffer-title (current-buffer)) "*"))))
+    (rename-buffer (concat "*haddock: " (w3m-buffer-title (current-buffer)) "*")))
+  (when (save-excursion (goto-char (point-min))
+                        (looking-at "Location: https?://hackage.haskell.org/package/.*/docs/src/"))
+    (font-lock-mode -1)
+    (let ((n (line-number-at-pos)))
+      (save-excursion
+        (goto-char (point-min))
+        (forward-line 1)
+        (let ((text (buffer-substring (point)
+                                      (point-max)))
+              (inhibit-read-only t))
+          (delete-region (point)
+                         (point-max))
+          (insert
+           (haskell-fontify-as-mode text
+                                    'haskell-mode))))
+      (goto-line n))))
 
 (defun w3m-haddock-damp-out-version ()
   "Damp out the Haddock version number."
