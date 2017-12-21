@@ -186,9 +186,9 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ;; ("<=|"              ["⤆"])
  ;; ("<==|"             ["⟽"])
 
- ("~>"               ["⇝"])
+ ;;("~>"               ["⇝"])
  ;; ("~~>"              ["⟿"])
- ("<~"               ["⇜"])
+ ;; ("<~"               ["⇜"])
  ;; ("<~~"              ["⬳"])
 
  ;; (">->"              ["↣"])
@@ -225,7 +225,7 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ;; Relational operators
  ("=="               ["≡"])
  ("/="               ["≢" "≠"])
- ; ("<="               ["≤"])
+ ;; ("<="               ["≤"])
  (">="               ["≥"])
  ("/<"               ["≮"])
  ("/>"               ["≯"])
