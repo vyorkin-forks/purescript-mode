@@ -194,14 +194,14 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ;; ("+++"              ["⧻"])
  ;; ("|||"              ["⫴"])
 
- ("~elem "             ["∈"])
- ("~notElem "          ["∉"])
- ("~member "           ["∈"])
- ("~notMember "        ["∉"])
- ("~union "            ["∪"])
- ("~intersection "     ["∩"])
- ("~isSubsetOf "       ["⊆"])
- ("~isProperSubsetOf " ["⊂"])
+ ; ("~elem "             ["∈"])
+ ; ("~notElem "          ["∉"])
+ ; ("~member "           ["∈"])
+ ; ("~notMember "        ["∉"])
+ ; ("~union "            ["∪"])
+ ; ("~intersection "     ["∩"])
+ ; ("~isSubsetOf "       ["⊆"])
+ ; ("~isProperSubsetOf " ["⊂"])
 
  ("~either"           ["⨿"])
  ("~coproduct"        ["⊕"])
@@ -213,11 +213,11 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("<<<"               ["⋘"])
  (">>>"               ["⋙"])
 
- ("~mempty"           ["∅"])
- ("~append"           ["◇"])
+ ("append"            ["◇"])
 
- (" ~alt "            [" ⫶ "])
- (" ~apply "          [" ⊛ "])
+ ("~alt"              [" ⫶ "])
+
+ (" ~ap "             [" ⊛ "])
  (" ~map "            [" ⊙ "])
 
  (" <|> "             [" ⫶ "])
