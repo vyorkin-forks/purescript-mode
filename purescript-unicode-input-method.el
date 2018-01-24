@@ -310,15 +310,6 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("^beta "              ["ᵝ"])
  ("^gamma "              ["ᵞ"])
  ("^delta "              ["ᵟ"])
-
- ("^ "              [""])
- ("^ "              [""])
- ("^ "              [""])
- ("^ "              [""])
- ("^ "              [""])
- ("^ "              [""])
- ("^ "              [""])
-
  )
 
 (provide 'purescript-unicode-input-method)
