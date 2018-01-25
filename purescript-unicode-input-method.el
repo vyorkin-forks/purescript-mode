@@ -232,6 +232,11 @@ packages (base-unicode-symbols and containers-unicode-symbols).
 
  ("~undefined"        ["⊥"])
 
+
+ ("~therefore"        ["∴"])
+ ("~because"          ["∵"])
+ ("~dotminus"         ["∸"])
+
  ;; Numeric subscripts
  ("~0 "              ["₀"])
  ("~1 "              ["₁"])
