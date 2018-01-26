@@ -232,7 +232,10 @@ packages (base-unicode-symbols and containers-unicode-symbols).
 
  ("~undefined"        ["⊥"])
 
-
+ ("~tiel"             ["⋉"])
+ ("~tier"             ["⋊"])
+ ("~square"           ["⌗"])
+ ("~bullet"           ["∙"])
  ("~therefore"        ["∴"])
  ("~because"          ["∵"])
  ("~dotminus"         ["∸"])
