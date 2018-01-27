@@ -158,7 +158,7 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  (" :: "               [" ∷ "])
 
  ;; Quantifiers
- ("forall"           ["∀"])
+ ("forall"             ["∀"])
 
  ;; Arrows
  (" -> "               [" → "])
@@ -190,18 +190,18 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ;; (" * "              [" ⋅ "])
 
  ;; Containers / Collections
- ;; ("++"               ["⧺"])
- ;; ("+++"              ["⧻"])
- ;; ("|||"              ["⫴"])
+ ("~++"                ["⧺"])
+ ("~+++"               ["⧻"])
+ ("~|||"               ["⫴"])
 
- ; ("~elem "             ["∈"])
- ; ("~notElem "          ["∉"])
- ; ("~member "           ["∈"])
- ; ("~notMember "        ["∉"])
- ; ("~union "            ["∪"])
- ; ("~intersection "     ["∩"])
- ; ("~isSubsetOf "       ["⊆"])
- ; ("~isProperSubsetOf " ["⊂"])
+ ("~elem "             ["∈"])
+ ("~notElem "          ["∉"])
+ ("~member "           ["∈"])
+ ("~notMember "        ["∉"])
+ ("~union "            ["∪"])
+ ("~intersection "     ["∩"])
+ ("~isSubsetOf "       ["⊆"])
+ ("~isProperSubsetOf " ["⊂"])
 
  ("~either"           ["⨿"])
  ("~coproduct"        ["⊕"])
@@ -213,16 +213,14 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("<<<"               ["⋘"])
  (">>>"               ["⋙"])
 
- ("append"            ["◇"])
+ ("~append"           ["◇"])
+ ("~alt"              ["⫶"])
+ ("~ap "              ["⊛"])
+ ("~map "             ["⊙"])
 
- ("~alt"              [" ⫶ "])
-
- (" ~ap "             [" ⊛ "])
- (" ~map "            [" ⊙ "])
-
- (" <|> "             [" ⫶ "])
- (" <*> "             [" ⊛ "])
- (" <$> "             [" ⊙ "])
+ ("~<|>"              ["⫶"])
+ ("~<*>"              ["⊛"])
+ ("~<$>"              ["⊙"])
 
  ("~apFst"            ["⪪"])
  ("~apSnd"            ["⪫"])
@@ -230,7 +228,30 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("~mapFst"           ["⪦"])
  ("~mapSnd"           ["⪧"])
 
+ ("~not"              ["⌐"])
+ ("~neg"              ["∸"])
+
+ ("~add"              ["⊕"])
+ ("~sub"              ["⊖"])
+ ("~mul"              ["⊗"])
+ ("~div"              ["⊘"])
+
  ("~undefined"        ["⊥"])
+
+ ("~and"              ["⊼"])
+ ("~or"               ["⊻"])
+
+ ("~eq"               ["≈"])
+ ("~neq"              ["≉"])
+ ("~ge"               ["≽"])
+ ("~gt"               ["≻"])
+ ("~le"               ["≼"])
+ ("~lt"               ["≺"])
+
+ ("~in"               ["∈"])
+ ("~is"               ["∻"])
+
+ ("~parens"           ["⏖"])
 
  ("~tiel"             ["⋉"])
  ("~tier"             ["⋊"])
@@ -315,7 +336,7 @@ packages (base-unicode-symbols and containers-unicode-symbols).
 
  ;; Greek letter superscripts
  ("^alpha "              ["ᵅ"])
- ("^beta "              ["ᵝ"])
+ ("^beta "               ["ᵝ"])
  ("^gamma "              ["ᵞ"])
  ("^delta "              ["ᵟ"])
  )
