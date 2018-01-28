@@ -228,7 +228,7 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("~mapFst"           ["⪦"])
  ("~mapSnd"           ["⪧"])
 
- ("~not"              ["⌐"])
+ ("~not"              ["‼"])
  ("~neg"              ["∸"])
 
  ("~add"              ["⊕"])
@@ -241,6 +241,11 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("~and"              ["⊼"])
  ("~or"               ["⊻"])
 
+ ("~ids"              ["⏘"])
+ ("~idm"              ["⏙"])
+
+ ("~var"              ["⧖"])
+
  ("~eq"               ["≈"])
  ("~neq"              ["≉"])
  ("~ge"               ["≽"])
@@ -249,9 +254,9 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("~lt"               ["≺"])
 
  ("~in"               ["∈"])
- ("~is"               ["∻"])
+ ("~is"               ["⍨"])
 
- ("~parens"           ["⏖"])
+ ("~parens"           ["⏝"])
 
  ("~tiel"             ["⋉"])
  ("~tier"             ["⋊"])
