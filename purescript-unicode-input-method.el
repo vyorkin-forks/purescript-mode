@@ -213,6 +213,12 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("<<<"               ["⋘"])
  (">>>"               ["⋙"])
 
+ ("~pipea"            ["⤀"])
+ ("~composea"         ["⬴"])
+
+ ("~><>"              ["⤀"])
+ ("~<><"              ["⬴"])
+
  ("~append"           ["◇"])
  ("~alt"              ["⫶"])
  ("~ap "              ["⊛"])
