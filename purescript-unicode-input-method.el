@@ -228,7 +228,7 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("~mapFst"           ["⪦"])
  ("~mapSnd"           ["⪧"])
 
- ("~not"              ["‼"])
+ ("~not"              ["⌐"])
  ("~neg"              ["∸"])
 
  ("~add"              ["⊕"])
