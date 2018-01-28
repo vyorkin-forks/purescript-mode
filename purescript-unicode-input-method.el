@@ -244,8 +244,6 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("~ids"              ["⏘"])
  ("~idm"              ["⏙"])
 
- ("~var"              ["⧖"])
-
  ("~eq"               ["≈"])
  ("~neq"              ["≉"])
  ("~ge"               ["≽"])
