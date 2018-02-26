@@ -158,7 +158,7 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  (" :: "               [" ∷ "])
 
  ;; Quantifiers
- ("forall"             ["∀"])
+ ("~forall"             ["∀"])
 
  ;; Arrows
  (" -> "               [" → "])
@@ -259,6 +259,7 @@ packages (base-unicode-symbols and containers-unicode-symbols).
 
  ("~in"               ["∈"])
  ("~is"               ["⍨"])
+ ("~nonempty"         ["⋇"])
 
  ("~parens"           ["⏝"])
 
