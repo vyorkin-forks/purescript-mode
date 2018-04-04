@@ -215,11 +215,9 @@ packages (base-unicode-symbols and containers-unicode-symbols).
  ("~<><" ["⬴"])
 
  ("~append" ["◇"])
+ ("~<>"     ["◇"])
 
- ("~map" ["⊙"])
  ("~<$>" ["⊙"])
-
- ("~ap"  ["⊛"])
  ("~<*>" ["⊛"])
 
  ("~alt" ["⫶"])
